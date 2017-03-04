@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('music', '0007_album_is_favorite'),
+        ('playbooks', '0007_album_is_favorite'),
     ]
 
     operations = [

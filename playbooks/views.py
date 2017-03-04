@@ -10,9 +10,9 @@ AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 
-def create_album(request):
+def create_playbook(request):
     if not request.user.is_authenticated():
-        return render(request, 'music/login.html')
+        return render(request, 'playbooks/login.html')
     else:
         form = AlbumForm(request.POST or None, request.FILES or None)
         if form.is_valid():
@@ -27,13 +27,13 @@ def create_album(request):
                     'form': form,
                     'error_message': 'Image file must be PNG, JPG, or JPEG',
                 }
-                return render(request, 'music/create_album.html', context)
+                return render(request, 'playbooks/create_playbook.html', context)
             album.save()
-            return render(request, 'music/detail.html', {'album': album})
+            return render(request, 'playbooks/detail.html', {'album': album})
         context = {
             "form": form,
         }
-        return render(request, 'music/create_album.html', context)
+        return render(request, 'playbooks/create_playbook.html', context)
 
 
 def create_song(request, album_id):
@@ -48,7 +48,7 @@ def create_song(request, album_id):
                     'form': form,
                     'error_message': 'You already added that song',
                 }
-                return render(request, 'music/create_song.html', context)
+                return render(request, 'playbooks/create_song.html', context)
         song = form.save(commit=False)
         song.album = album
         song.audio_file = request.FILES['audio_file']
@@ -60,41 +60,41 @@ def create_song(request, album_id):
                 'form': form,
                 'error_message': 'Audio file must be WAV, MP3, or OGG',
             }
-            return render(request, 'music/create_song.html', context)
+            return render(request, 'playbooks/create_song.html', context)
 
         song.save()
-        return render(request, 'music/detail.html', {'album': album})
+        return render(request, 'playbooks/detail.html', {'album': album})
     context = {
         'album': album,
         'form': form,
     }
-    return render(request, 'music/create_song.html', context)
+    return render(request, 'playbooks/create_song.html', context)
 
 
 def delete_album(request, album_id):
     album = Album.objects.get(pk=album_id)
     album.delete()
     albums = Album.objects.filter(user=request.user)
-    return render(request, 'music/index.html', {'albums': albums})
+    return render(request, 'playbooks/index.html', {'albums': albums})
 
 
 def delete_song(request, album_id, song_id):
     album = get_object_or_404(Album, pk=album_id)
     song = Song.objects.get(pk=song_id)
     song.delete()
-    return render(request, 'music/detail.html', {'album': album})
+    return render(request, 'playbooks/detail.html', {'album': album})
 
 
 def detail(request, album_id):
     if not request.user.is_authenticated():
-        return render(request, 'music/login.html')
+        return render(request, 'playbooks/login.html')
     else:
         user = request.user
         album = get_object_or_404(Album, pk=album_id)
-        return render(request, 'music/detail.html', {'album': album, 'user': user})
+        return render(request, 'playbooks/detail.html', {'album': album, 'user': user})
 
 
-def favorite(request, song_id):
+def unsynced(request, song_id):
     song = get_object_or_404(Song, pk=song_id)
     try:
         if song.is_favorite:
@@ -124,7 +124,7 @@ def favorite_album(request, album_id):
 
 def index(request):
     if not request.user.is_authenticated():
-        return render(request, 'music/login.html')
+        return render(request, 'playbooks/login.html')
     else:
         albums = Album.objects.filter(user=request.user)
         song_results = Song.objects.all()
@@ -137,12 +137,12 @@ def index(request):
             song_results = song_results.filter(
                 Q(song_title__icontains=query)
             ).distinct()
-            return render(request, 'music/index.html', {
+            return render(request, 'playbooks/index.html', {
                 'albums': albums,
                 'songs': song_results,
             })
         else:
-            return render(request, 'music/index.html', {'albums': albums})
+            return render(request, 'playbooks/index.html', {'albums': albums})
 
 
 def logout_user(request):
@@ -151,7 +151,7 @@ def logout_user(request):
     context = {
         "form": form,
     }
-    return render(request, 'music/login.html', context)
+    return render(request, 'playbooks/login.html', context)
 
 
 def login_user(request):
@@ -163,12 +163,12 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 albums = Album.objects.filter(user=request.user)
-                return render(request, 'music/index.html', {'albums': albums})
+                return render(request, 'playbooks/index.html', {'albums': albums})
             else:
-                return render(request, 'music/login.html', {'error_message': 'Your account has been disabled'})
+                return render(request, 'playbooks/login.html', {'error_message': 'Your account has been disabled'})
         else:
-            return render(request, 'music/login.html', {'error_message': 'Invalid login'})
-    return render(request, 'music/login.html')
+            return render(request, 'playbooks/login.html', {'error_message': 'Invalid login'})
+    return render(request, 'playbooks/login.html')
 
 
 def register(request):
@@ -184,16 +184,16 @@ def register(request):
             if user.is_active:
                 login(request, user)
                 albums = Album.objects.filter(user=request.user)
-                return render(request, 'music/index.html', {'albums': albums})
+                return render(request, 'playbooks/index.html', {'albums': albums})
     context = {
         "form": form,
     }
-    return render(request, 'music/register.html', context)
+    return render(request, 'playbooks/login.html', context) #TODO: edit for admin
 
 
-def songs(request, filter_by):
+def hosts(request, filter_by):
     if not request.user.is_authenticated():
-        return render(request, 'music/login.html')
+        return render(request, 'playbooks/login.html')
     else:
         try:
             song_ids = []
@@ -205,7 +205,7 @@ def songs(request, filter_by):
                 users_songs = users_songs.filter(is_favorite=True)
         except Album.DoesNotExist:
             users_songs = []
-        return render(request, 'music/songs.html', {
+        return render(request, 'playbooks/hosts.html', {
             'song_list': users_songs,
             'filter_by': filter_by,
         })

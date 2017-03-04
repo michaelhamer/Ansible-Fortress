@@ -1,15 +1,29 @@
-{% extends 'music/base.html' %}
-{% block title %}All Songs{% endblock %}
-{% block songs_active %}active{% endblock %}
+{% extends 'playbooks/base.html' %}
+{% block title %}All Hosts{% endblock %}
+{% block hosts_active %}active{% endblock %}
 
 {% block body %}
 <div class="container-fluid songs-container">
 
+    <div class="progress">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+            60%
+        </div>
+        <div class="progress">
+            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                40%
+            </div>
+        </div>
+    </div>
+
+
+
+
     <div class="row">
         <div class="col-sm-12">
-            <ul class="nav nav-pills" style="margin-bottom: 10px;">
-                <li role="presentation" {% if filter_by == 'all' %}class="active"{% endif %}><a href="{% url 'music:songs' 'all' %}">View All</a></li>
-                <li role="presentation" {% if filter_by == 'favorites' %}class="active"{% endif %}><a href="{% url 'music:songs' 'favorites' %}">Favorites</a></li>
+            <ul class="nav nav-pills" style="tablist">
+                <li role="presentation" {% if filter_by == 'all' %}class="active"{% endif %}><a href="{% url 'playbooks:hosts' 'all' %}">View All <span class="badge">hosts_count_here</span></a></li>
+                <li role="presentation" {% if filter_by == 'unsynced' %}class="active"{% endif %}><a href="{% url 'playbooks:hosts' 'unsynced' %}">Unsynced Hosts <span class="badge">unsynced_count_here</span></a></li>
             </ul>
         </div>
     </div>
@@ -23,11 +37,10 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Song Title</th>
-                                <th>Artist</th>
-                                <th>Audio File</th>
-                                <th>Album</th>
-                                <th>Favorite</th>
+                                <th>Hostname</th>
+                                <th>Release</th>
+                                <th>Environment</th>
+                                <th>Hostgroup</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,13 +56,13 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="{% url 'music:detail' song.album.id %}">
+                                        <a href="{% url 'playbooks:detail' song.album.id %}">
                                             <img src="{{ song.album.album_logo.url }}" class="img-responsive" style="width: 20px; float: left; margin-right: 10px;" />
                                         </a>
-                                        <a href="{% url 'music:detail' song.album.id %}">{{ song.album.album_title }}</a>
+                                        <a href="{% url 'playbooks:detail' song.album.id %}">{{ song.album.album_title }}</a>
                                     </td>
                                     <td>
-                                        <a href="{% url 'music:favorite' song.id %}" class="btn-favorite"><span class="glyphicon glyphicon-star {% if song.is_favorite %}active{% endif %}"></span></a>
+                                        <a href="{% url 'playbooks:favorite' song.id %}" class="btn-favorite"><span class="glyphicon glyphicon-star {% if song.is_favorite %}active{% endif %}"></span></a>
                                     </td>
                                 </tr>
                             {% endfor %}
