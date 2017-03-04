@@ -26,33 +26,33 @@ class Song(models.Model):
 
 
 
-# #Static tables
-#
-# class OfekApp(models.Model):
-#     user = models.ForeignKey(User)
-#     application = models.CharField(max_length=30)
-#
-# class Inventory(models.Model):
-#     user = models.ForeignKey(User)
-#     hostname = models.CharField(max_length=20)
-#
-# class Playbook(models.Model):
-#     CRON = (
-#         ('hour', 'hour'),
-#         ('day', 'day'),
-#         ('week', 'week'),
-#     )
-#     user = models.ForeignKey(User)
-#     duration = models.CharField(max_length=4, choices=CRON, default='hour')
-#     playbook_path = models.FilePathField(path='/etc/ansible/playbooks/' + duration, match='*.yml', recursive=False, max_length=200)
-#
-#
-# #Logic table for playbook per app
-#
-# class App_Playbook(models.Model):
-#     user = models.ForeignKey(User)
-#     hostname_pk = models.IntegerField()
-#     playbook_pk = models.IntegerField()
+#Static tables
+
+class OfekApp(models.Model):
+    user = models.ForeignKey(User)
+    application = models.CharField(max_length=30)
+
+class Inventory(models.Model):
+    user = models.ForeignKey(User)
+    hostname = models.CharField(max_length=20)
+
+class Playbook(models.Model):
+    CRON = (
+        ('hour', 'hour'),
+        ('day', 'day'),
+        ('week', 'week'),
+    )
+    user = models.ForeignKey(User)
+    duration = models.CharField(max_length=4, choices=CRON, default='hour')
+    playbook_path = models.FilePathField(path='/etc/ansible/playbooks', match='*.yml', recursive=False, default='test.yml', max_length=200)
+
+
+#Logic table for playbook per app
+
+class App_Playbook(models.Model):
+    user = models.ForeignKey(User)
+    hostname_pk = models.IntegerField()
+    playbook_pk = models.IntegerField()
 
 
 
