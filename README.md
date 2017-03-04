@@ -1,4 +1,4 @@
-![](http://i.imgur.com/YiFZyuW.png)
+![](http://i.imgur.com/G1LwmEc.png)
 
 # What is Ansible-Fortress?
 
