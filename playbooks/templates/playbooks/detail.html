@@ -12,8 +12,8 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <a href="{% url 'playbooks:detail' playbook.id %}">
-                            <h1>playbook.playbook_description</h1>
-                            <h3>playbook.playbook_text</h3>
+                            <h1>{{ playbook.playbook_description }}</h1>
+                            <h3>{{ playbook.playbook_text }}</h3>
                     </a>
                 </div>
             </div>
