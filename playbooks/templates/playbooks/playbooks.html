@@ -1,0 +1,47 @@
+{% extends 'playbooks/base.html' %}
+{% block albums_active %}active{% endblock %}
+
+{% block body %}
+<div class="albums-container container-fluid">
+
+    <!-- Playbooks -->
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>{{ user.username }}'s Playbooks</h3>
+        </div>
+        {% if playbooks %}
+        {% for playbook in playbooks %}
+        <div class="col-sm-4 col-lg-2">
+            <div class="thumbnail">
+                <h1>{{ playbook }}</h1>
+                <div class="caption">
+
+                    View Details
+                    <a href="{% url 'playbooks:detail' playbook.pk %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+
+                    <!-- Delete Album -->
+                    <form action="{% url 'playbooks:delete_playbook' playbook.pk %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="playbook.pk" value="{{ playbook.pk }}" />
+                        <button type="submit" class="btn btn-default btn-sm">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+        {% endfor %}
+        {% endif %}
+        <div class="col-sm-12">
+            <br>
+            <a href="{% url 'playbooks:create_playbook' %}">
+                <button type="button" class="btn btn-success">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp; Add a Playbook
+                </button>
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

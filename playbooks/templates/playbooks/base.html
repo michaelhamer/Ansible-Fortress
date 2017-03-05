@@ -30,7 +30,7 @@
         <!-- Items -->
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
-                <li class="{% block albums_active %}{% endblock %}"><a href="{% url 'playbooks:index' %}"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; My Playbooks</a></li>
+                <li class="{% block albums_active %}{% endblock %}"><a href="{% url 'playbooks:playbooks' %}"><span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp; My Playbooks</a></li>
                 <li class="{% block hosts_active %}{% endblock %}"><a href="{% url 'playbooks:hosts' 'all' %}"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>&nbsp; My Hosts</a></li>
             </ul>
             <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'playbooks:index' %}">

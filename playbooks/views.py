@@ -6,6 +6,31 @@ from django.db.models import Q
 from .forms import PlaybookForm, UserForm
 from .models import Playbook
 
+def index(request):
+    return render(request, 'playbooks/index.html')
+
+def playbooks(request):
+    if not request.user.is_authenticated():
+        return render(request, 'playbooks/login.html')
+    else:
+        playbooks = Playbook.objects.all() #TODO: filter by user
+        #playbooks = Playbook.objects.filter(user=request.user)
+        # query = request.GET.get("q")
+        # if query:
+        #     albums = albums.filter(
+        #         Q(album_title__icontains=query) |
+        #         Q(artist__icontains=query)
+        #     ).distinct()
+        #     song_results = song_results.filter(
+        #         Q(song_title__icontains=query)
+        #     ).distinct()
+        #     return render(request, 'playbooks/index.html', {
+        #         'albums': albums,
+        #         'songs': song_results,
+        #     })
+        return render(request, 'playbooks/playbooks.html', {'playbooks': playbooks})
+
+
 def create_playbook(request):
     if not request.user.is_authenticated():
         return render(request, 'playbooks/login.html')
@@ -30,112 +55,35 @@ def create_playbook(request):
         }
         return render(request, 'playbooks/create_playbook.html', context)
 
-
-# def create_song(request, album_id):
-#     form = SongForm(request.POST or None, request.FILES or None)
-#     album = get_object_or_404(Album, pk=album_id)
-#     if form.is_valid():
-#         albums_songs = album.song_set.all()
-#         for s in albums_songs:
-#             if s.song_title == form.cleaned_data.get("song_title"):
-#                 context = {
-#                     'album': album,
-#                     'form': form,
-#                     'error_message': 'You already added that song',
-#                 }
-#                 return render(request, 'playbooks/create_song.html', context)
-#         song = form.save(commit=False)
-#         song.album = album
-#         song.audio_file = request.FILES['audio_file']
-#         file_type = song.audio_file.url.split('.')[-1]
-#         file_type = file_type.lower()
-#         if file_type not in AUDIO_FILE_TYPES:
-#             context = {
-#                 'album': album,
-#                 'form': form,
-#                 'error_message': 'Audio file must be WAV, MP3, or OGG',
-#             }
-#             return render(request, 'playbooks/create_song.html', context)
-#
-#         song.save()
-#         return render(request, 'playbooks/detail.html', {'album': album})
-#     context = {
-#         'album': album,
-#         'form': form,
-#     }
-#     return render(request, 'playbooks/create_song.html', context)
-#
-#
-# def delete_album(request, album_id):
-#     album = Album.objects.get(pk=album_id)
-#     album.delete()
-#     albums = Album.objects.filter(user=request.user)
-#     return render(request, 'playbooks/index.html', {'albums': albums})
-#
-#
-# def delete_song(request, album_id, song_id):
-#     album = get_object_or_404(Album, pk=album_id)
-#     song = Song.objects.get(pk=song_id)
-#     song.delete()
-#     return render(request, 'playbooks/detail.html', {'album': album})
-#
-#
-# def detail(request, album_id):
-#     if not request.user.is_authenticated():
-#         return render(request, 'playbooks/login.html')
-#     else:
-#         user = request.user
-#         album = get_object_or_404(Album, pk=album_id)
-#         return render(request, 'playbooks/detail.html', {'album': album, 'user': user})
-#
-#
-# def unsynced(request, song_id):
-#     song = get_object_or_404(Song, pk=song_id)
-#     try:
-#         if song.is_favorite:
-#             song.is_favorite = False
-#         else:
-#             song.is_favorite = True
-#         song.save()
-#     except (KeyError, Song.DoesNotExist):
-#         return JsonResponse({'success': False})
-#     else:
-#         return JsonResponse({'success': True})
-#
-#
-# def favorite_album(request, album_id):
-#     album = get_object_or_404(Album, pk=album_id)
-#     try:
-#         if album.is_favorite:
-#             album.is_favorite = False
-#         else:
-#             album.is_favorite = True
-#         album.save()
-#     except (KeyError, Album.DoesNotExist):
-#         return JsonResponse({'success': False})
-#     else:
-#         return JsonResponse({'success': True})
+def delete_playbook(request, playbook_id):
+    playbook = Playbook.objects.get(pk=playbook_id)
+    playbook.delete()
+    #playbooks = Playbook.objects.filter(user=request.user)
+    playbooks = Playbook.objects.all() #TODO: filter by user
+    return render(request, 'playbooks/index.html', {'playbooks': playbooks})
 
 
-def index(request):
+def detail(request, playbook_id):
     if not request.user.is_authenticated():
         return render(request, 'playbooks/login.html')
     else:
-        playbooks = Playbook.objects.filter(user=request.user)
-        # query = request.GET.get("q")
-        # if query:
-        #     albums = albums.filter(
-        #         Q(album_title__icontains=query) |
-        #         Q(artist__icontains=query)
-        #     ).distinct()
-        #     song_results = song_results.filter(
-        #         Q(song_title__icontains=query)
-        #     ).distinct()
-        #     return render(request, 'playbooks/index.html', {
-        #         'albums': albums,
-        #         'songs': song_results,
-        #     })
-        return render(request, 'playbooks/index.html', {'playbooks': playbooks})
+        user = request.user
+        playbook = get_object_or_404(Playbook, pk=playbook_id)
+        return render(request, 'playbooks/detail.html', {'playbook': playbook, 'user': user})
+
+
+def unsynced(request, host_id):
+    # song = get_object_or_404(Song, pk=song_id)
+    # try:
+    #     if song.is_favorite:
+    #         song.is_favorite = False
+    #     else:
+    #         song.is_favorite = True
+    #     song.save()
+    # except (KeyError, Song.DoesNotExist):
+    #     return JsonResponse({'success': False})
+    # else:
+        return JsonResponse({'success': True})
 
 
 def logout_user(request):
@@ -202,3 +150,5 @@ def hosts(request, filter_by):
         #     users_songs = []
         # context = {'song_list': users_songs, 'filter_by': filter_by,}
         return render(request, 'playbooks/hosts.html')
+
+

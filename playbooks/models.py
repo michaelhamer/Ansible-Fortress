@@ -45,6 +45,10 @@ class Playbook(models.Model):
     user = models.ForeignKey(User)
     duration = models.CharField(max_length=4, choices=CRON, default='hour')
     playbook_text = models.CharField(max_length=10000, default='')
+    playbook_description = models.CharField(max_length=10000, default='No description')
+
+    def __str__(self):
+        return self.playbook_description
 
 
 #Logic table for playbook per app
