@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Album, Song
+from .models import Album, Song, Playbook
 
 
 class AlbumForm(forms.ModelForm):
@@ -24,3 +24,12 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password']
+
+
+class PlaybookForm(forms.Form):
+    name = forms.CharField()
+    playbook_text = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Playbook
+

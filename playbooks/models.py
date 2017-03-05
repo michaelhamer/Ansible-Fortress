@@ -44,7 +44,7 @@ class Playbook(models.Model):
     )
     user = models.ForeignKey(User)
     duration = models.CharField(max_length=4, choices=CRON, default='hour')
-    playbook_path = models.FilePathField(path='/etc/ansible/playbooks', match='*.yml', recursive=False, default='test.yml', max_length=200)
+    playbook_text = models.CharField(max_length=10000, default='')
 
 
 #Logic table for playbook per app
