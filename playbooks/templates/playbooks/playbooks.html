@@ -1,5 +1,5 @@
 {% extends 'playbooks/base.html' %}
-{% block albums_active %}active{% endblock %}
+{% block playbooks_active %}active{% endblock %}
 
 {% block body %}
 <div class="albums-container container-fluid">
@@ -16,8 +16,8 @@
                 <h1>{{ playbook }}</h1>
                 <div class="caption">
 
-                    View Details
-                    <a href="{% url 'playbooks:detail' playbook.pk %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+                    View Playbook
+                    <a href="{% url 'playbooks:detail' playbook.pk %}" class="btn btn-primary btn-sm" role="button">View Playbook</a>
 
                     <!-- Delete Album -->
                     <form action="{% url 'playbooks:delete_playbook' playbook.pk %}" method="post" style="display: inline;">

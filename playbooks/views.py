@@ -56,11 +56,12 @@ def create_playbook(request):
         return render(request, 'playbooks/create_playbook.html', context)
 
 def delete_playbook(request, playbook_id):
+    #TODO: are you sure messagebox for user
     playbook = Playbook.objects.get(pk=playbook_id)
     playbook.delete()
     #playbooks = Playbook.objects.filter(user=request.user)
     playbooks = Playbook.objects.all() #TODO: filter by user
-    return render(request, 'playbooks/index.html', {'playbooks': playbooks})
+    return render(request, 'playbooks/playbooks.html', {'playbooks': playbooks})
 
 
 def detail(request, playbook_id):
