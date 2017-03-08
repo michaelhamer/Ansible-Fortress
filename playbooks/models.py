@@ -32,9 +32,17 @@ class OfekApp(models.Model):
     user = models.ForeignKey(User)
     application = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.application
+
+DEFAULT_APP=1
 class Inventory(models.Model):
-    user = models.ForeignKey(User)
+    ofekApp = models.ForeignKey(User, default=DEFAULT_APP, on_delete=models.CASCADE)
     hostname = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.ofekApp + '-' + self.hostname
+
 
 class Playbook(models.Model):
     CRON = (
